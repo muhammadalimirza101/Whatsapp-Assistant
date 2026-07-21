@@ -1,0 +1,11 @@
+{
+  "name": "@wa/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vercel serverless app — Google OAuth routes (Phase 2). Placeholder in Phase 1.",
+  "scripts": {
+    "typecheck": "echo \"@wa/web: no sources yet (Phase 2)\" && exit 0",
+    "build": "echo \"@wa/web: nothing to build in Phase 1\" && exit 0"
+  }
+}
