@@ -1,0 +1,63 @@
+# Render Blueprint for the WhatsApp assistant bot (apps/bot).
+# Free web service on Render — the single persistent process:
+# Baileys connection, OpenAI agent loop, pg-boss reminder worker, Express /health.
+#
+# Deploy: push to GitHub, then in Render use "New + > Blueprint" and pick this repo.
+services:
+  - type: web
+    name: whatsapp-assistant
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+
+    # NOTE: we deliberately do NOT run `corepack enable` — on Render's build
+    # image /usr/bin is read-only, so `corepack enable` fails with
+    # `EROFS: read-only file system, unlink '/usr/bin/pnpm'`.
+    # `corepack prepare ... --activate` installs pnpm into corepack's own
+    # writable cache instead, which works on the read-only image.
+    buildCommand: corepack prepare pnpm@9.15.0 --activate && pnpm install --frozen-lockfile
+    startCommand: corepack prepare pnpm@9.15.0 --activate && pnpm --filter @wa/bot start
+
+    healthCheckPath: /health
+
+    envVars:
+      # Pin Node to 20 (matches .nvmrc / engines).
+      - key: NODE_VERSION
+        value: "20"
+
+      # --- Secrets: set these in the Render dashboard (sync:false = not in git) ---
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: ALLOWED_PHONES
+        sync: false
+
+      # --- Google OAuth (Phase 2; harmless to leave unset in Phase 1) ---
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+
+      # --- Ops: set to the Render URL once known (https://<name>.onrender.com) ---
+      - key: BOT_PUBLIC_URL
+        sync: false
+
+      # --- Tuning (defaults; override in dashboard if needed) ---
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: GROQ_MODEL
+        value: whisper-large-v3
+      - key: BAILEYS_SESSION_ID
+        value: default
+      - key: SUPABASE_STORAGE_BUCKET
+        value: user-files
