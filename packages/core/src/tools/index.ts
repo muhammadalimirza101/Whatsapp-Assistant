@@ -15,9 +15,20 @@ import { listTasks } from "./listTasks.js";
 import { completeTask } from "./completeTask.js";
 import { scheduleFollowup } from "./scheduleFollowup.js";
 
+// Phase 2 — Google suite
+import { connectGoogle } from "./connectGoogle.js";
+import { getTodaysMeetings } from "./getTodaysMeetings.js";
+import { createCalendarEvent } from "./createCalendarEvent.js";
+import { draftEmail } from "./draftEmail.js";
+import { sendEmail } from "./sendEmail.js";
+import { readRecentEmails } from "./readRecentEmails.js";
+import { readSheet } from "./readSheet.js";
+import { generateReportFromSheet } from "./generateReportFromSheet.js";
+
 export * from "./types.js";
 
 const ALL_TOOLS: readonly AssistantTool[] = [
+  // Phase 1 — core assistant
   createReminder,
   listReminders,
   cancelReminder,
@@ -25,6 +36,15 @@ const ALL_TOOLS: readonly AssistantTool[] = [
   listTasks,
   completeTask,
   scheduleFollowup,
+  // Phase 2 — Google suite
+  connectGoogle,
+  getTodaysMeetings,
+  createCalendarEvent,
+  draftEmail,
+  sendEmail,
+  readRecentEmails,
+  readSheet,
+  generateReportFromSheet,
 ];
 
 const byName = new Map<string, AssistantTool>(ALL_TOOLS.map((t) => [t.name, t]));

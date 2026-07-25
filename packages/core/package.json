@@ -16,6 +16,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
     "drizzle-orm": "^0.38.4",
+    "googleapis": "^173.0.0",
     "openai": "^4.83.0",
     "pg": "^8.13.1",
     "postgres": "^3.4.5"

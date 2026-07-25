@@ -49,3 +49,18 @@ export { formatInTz, nowInTz, parseModelDate } from "./util/time.js";
 // Clients
 export { openai, OPENAI_MODEL } from "./clients/openai.js";
 export { transcribeAudio, GROQ_MODEL } from "./clients/groq.js";
+export {
+  google,
+  makeOAuthClient,
+  buildConsentUrl,
+  getUserOAuthClient,
+  GOOGLE_SCOPES,
+} from "./clients/google.js";
+
+// OAuth store (Phase 2)
+export {
+  createOAuthState,
+  consumeOAuthState,
+  upsertGoogleTokens,
+  hasGoogleConnected,
+} from "./db/oauthStore.js";

@@ -84,6 +84,18 @@ export const files = pgTable("files", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// Phase 2: short-lived state token tying a Google consent link to a user.
+// Consumed once by the OAuth callback; rows are deleted after use / expiry.
+export const oauthStates = pgTable("oauth_states", {
+  state: text("state").primaryKey(), // random token embedded in the consent URL
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  provider: text("provider").notNull().default("google"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+});
+
 // Row types inferred from the schema, for use across the codebase.
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -96,3 +108,4 @@ export type NewTask = typeof tasks.$inferInsert;
 export type OAuthToken = typeof oauthTokens.$inferSelect;
 export type BaileysAuthRow = typeof baileysAuth.$inferSelect;
 export type FileRow = typeof files.$inferSelect;
+export type OAuthState = typeof oauthStates.$inferSelect;

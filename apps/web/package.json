@@ -3,9 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Vercel serverless app — Google OAuth routes (Phase 2). Placeholder in Phase 1.",
+  "description": "Vercel serverless app — Google OAuth routes (Phase 2).",
   "scripts": {
-    "typecheck": "echo \"@wa/web: no sources yet (Phase 2)\" && exit 0",
-    "build": "echo \"@wa/web: nothing to build in Phase 1\" && exit 0"
+    "typecheck": "tsc --noEmit",
+    "build": "echo \"@wa/web: Vercel builds the api/ functions; nothing to compile here\" && exit 0"
+  },
+  "dependencies": {
+    "@wa/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "@vercel/node": "^5.1.0",
+    "typescript": "^5.7.3"
   }
 }

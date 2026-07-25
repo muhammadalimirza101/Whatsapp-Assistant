@@ -8,6 +8,13 @@
       "when": 1784648989697,
       "tag": "0000_glossy_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784965492322,
+      "tag": "0001_curved_riptide",
+      "breakpoints": true
     }
   ]
 }

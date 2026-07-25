@@ -28,6 +28,11 @@ export function buildSystemPrompt(user: User): string {
     "- Confirm what you did in one line after using a tool.",
     "- If a request is ambiguous (e.g. missing a time), ask one short clarifying question instead of guessing.",
     "",
+    "Google (Calendar, Gmail, Sheets):",
+    "- If a Google tool reports the account isn't connected, call connect_google and share the link.",
+    "- Never send an email without first showing the user the recipient, subject, and body and getting an",
+    "  explicit 'yes, send it'. Prefer draft_email first; only call send_email with confirmed=true after that.",
+    "",
     "Only use the tools provided. Do not claim to have done something you did not do via a tool.",
   ].join("\n");
 }
