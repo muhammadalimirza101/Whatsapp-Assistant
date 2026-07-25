@@ -57,9 +57,12 @@ importers:
 
   apps/web:
     dependencies:
-      '@wa/core':
-        specifier: workspace:*
-        version: link:../../packages/core
+      googleapis:
+        specifier: ^173.0.0
+        version: 173.0.0
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.9
     devDependencies:
       '@types/node':
         specifier: ^22.13.0

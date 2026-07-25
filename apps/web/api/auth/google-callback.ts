@@ -1,7 +1,7 @@
 // GET /api/auth/google/callback?code=...&state=... — exchange the auth code for
 // tokens, upsert them for the user, and show a "Done, go back to WhatsApp" page.
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { makeOAuthClient, consumeOAuthState, upsertGoogleTokens } from "@wa/core";
+import { makeOAuthClient, consumeOAuthState, upsertGoogleTokens } from "../../lib/oauth.js";
 
 function page(title: string, body: string): string {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>body{font-family:system-ui,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1.5rem;text-align:center;color:#111}h1{font-size:1.4rem}p{color:#444;line-height:1.5}</style></head><body><h1>${title}</h1><p>${body}</p></body></html>`;
@@ -37,7 +37,6 @@ export default async function handler(
     const { tokens } = await client.getToken(code);
 
     if (!tokens.refresh_token) {
-      // Without a refresh token we can't act on the user's behalf later.
       res
         .status(400)
         .send(
