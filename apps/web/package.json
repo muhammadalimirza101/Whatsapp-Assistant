@@ -5,8 +5,7 @@
   "type": "module",
   "description": "Vercel serverless app — Google OAuth routes (Phase 2). Self-contained (no workspace deps) so Vercel builds the functions cleanly.",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build": "echo \"@wa/web: Vercel builds the api/ functions; nothing to compile here\" && exit 0"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "googleapis": "^173.0.0",
