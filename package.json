@@ -9,11 +9,18 @@
   "scripts": {
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
+    "typecheck:api": "tsc --noEmit -p tsconfig.api.json",
     "dev:bot": "pnpm --filter @wa/bot dev",
     "db:generate": "pnpm --filter @wa/core db:generate",
     "db:migrate": "pnpm --filter @wa/core db:migrate"
   },
+  "dependencies": {
+    "googleapis": "^173.0.0",
+    "postgres": "^3.4.5"
+  },
   "devDependencies": {
+    "@types/node": "^22.13.0",
+    "@vercel/node": "^5.1.0",
     "typescript": "^5.7.3"
   }
 }

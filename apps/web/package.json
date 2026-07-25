@@ -3,17 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Vercel serverless app — Google OAuth routes (Phase 2). Self-contained (no workspace deps) so Vercel builds the functions cleanly.",
+  "description": "Placeholder. The Vercel OAuth functions now live at the repo-root api/ directory (Vercel builds from root). See ../../api and ../../lib/oauth.ts.",
   "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "googleapis": "^173.0.0",
-    "postgres": "^3.4.5"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.0",
-    "@vercel/node": "^5.1.0",
-    "typescript": "^5.7.3"
+    "typecheck": "echo \"@wa/web: functions moved to repo-root api/ (typechecked via tsconfig.api.json)\" && exit 0"
   }
 }
