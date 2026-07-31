@@ -2,6 +2,7 @@
 // All timestamps are stored in UTC (timestamptz) and formatted per-user later.
 import {
   bigint,
+  boolean,
   jsonb,
   pgTable,
   primaryKey,
@@ -16,6 +17,8 @@ export const users = pgTable("users", {
   phone: text("phone").notNull().unique(), // E.164
   name: text("name"),
   timezone: text("timezone").notNull().default("Asia/Karachi"),
+  // Daily briefing: local hour (0–23) to send the digest, or null = disabled.
+  briefingHour: bigint("briefing_hour", { mode: "number" }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -85,6 +88,26 @@ export const files = pgTable("files", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// Named lists (Memorae-style): multiple named lists per user, each with items.
+export const lists = pgTable("lists", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  name: text("name").notNull(), // e.g. "groceries", "shopping", "work"
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const listItems = pgTable("list_items", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  listId: uuid("list_id")
+    .notNull()
+    .references(() => lists.id),
+  content: text("content").notNull(),
+  checked: boolean("checked").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Phase 4: personal memory — facts the user asks the bot to remember, with an
 // embedding for semantic recall (Memorae-style "memory layer").
 export const memories = pgTable("memories", {
@@ -125,3 +148,5 @@ export type FileRow = typeof files.$inferSelect;
 export type OAuthState = typeof oauthStates.$inferSelect;
 export type Memory = typeof memories.$inferSelect;
 export type NewMemory = typeof memories.$inferInsert;
+export type List = typeof lists.$inferSelect;
+export type ListItem = typeof listItems.$inferSelect;

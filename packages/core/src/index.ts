@@ -54,6 +54,12 @@ export {
   listMemories,
   deleteMemory,
 } from "./db/memoryStore.js";
+export {
+  usersWithBriefings,
+  setBriefingHour,
+  buildBriefing,
+} from "./db/briefingStore.js";
+export type { BriefingUser } from "./db/briefingStore.js";
 export { transcribeAudio, GROQ_MODEL } from "./clients/groq.js";
 export {
   google,

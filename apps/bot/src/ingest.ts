@@ -2,6 +2,7 @@
 // agent loop can consume. Voice notes are transcribed via Groq Whisper.
 import { transcribeAudio, type NormalizedMessage } from "@wa/core";
 import { logger } from "./logger.js";
+import { extractDocumentText } from "./extract.js";
 
 export interface IngestResult {
   text: string;
@@ -40,14 +41,42 @@ export async function ingest(msg: NormalizedMessage): Promise<IngestResult | nul
     }
   }
 
-  // Phase 1: images/documents are acknowledged via their caption/filename only;
-  // full document handling arrives in Phase 4.
-  if (msg.type === "image" || msg.type === "document") {
+  // Documents: extract text (PDF / text / CSV / md) and hand it to the agent so
+  // it can summarize, answer questions, or remember it.
+  if (msg.type === "document") {
     const caption = msg.text?.trim();
-    if (caption) return { text: caption, msgType: msg.type };
+    if (msg.mediaBuffer) {
+      const extracted = await extractDocumentText(
+        msg.mediaBuffer,
+        msg.mimeType ?? "application/octet-stream",
+        msg.filename ?? "document",
+      );
+      if (extracted) {
+        const name = msg.filename ? ` "${msg.filename}"` : "";
+        const ask = caption ? `\n\nThe user's message with it: ${caption}` : "";
+        return {
+          text:
+            `[The user sent a document${name}. Its extracted text is below. ` +
+            `Summarize it, answer any question about it, or store key facts with the remember tool as appropriate.]` +
+            `\n\n---\n${extracted}\n---${ask}`,
+          msgType: "document",
+        };
+      }
+    }
+    if (caption) return { text: caption, msgType: "document" };
     return {
-      text: `[The user sent a ${msg.type}${msg.filename ? ` named "${msg.filename}"` : ""} with no caption. Attachments aren't processed yet; ask what they'd like done.]`,
-      msgType: msg.type,
+      text: `[The user sent a document${msg.filename ? ` named "${msg.filename}"` : ""} that couldn't be read (unsupported type). Ask them to send a PDF or text file, or type the content.]`,
+      msgType: "document",
+    };
+  }
+
+  // Images: Phase-1 behavior — acknowledge via caption; OCR/vision is future work.
+  if (msg.type === "image") {
+    const caption = msg.text?.trim();
+    if (caption) return { text: caption, msgType: "image" };
+    return {
+      text: "[The user sent an image with no caption. I can't view image contents yet; ask what they'd like done with it.]",
+      msgType: "image",
     };
   }
 

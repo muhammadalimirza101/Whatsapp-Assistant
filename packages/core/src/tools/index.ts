@@ -31,6 +31,13 @@ import { recall } from "./recall.js";
 import { listMemoriesTool } from "./listMemories.js";
 import { forget } from "./forget.js";
 
+// Memorae parity — named lists + daily briefings
+import { addToList } from "./addToList.js";
+import { showList } from "./showList.js";
+import { listLists } from "./listLists.js";
+import { removeFromList } from "./removeFromList.js";
+import { setBriefing } from "./setBriefing.js";
+
 export * from "./types.js";
 
 const ALL_TOOLS: readonly AssistantTool[] = [
@@ -56,6 +63,12 @@ const ALL_TOOLS: readonly AssistantTool[] = [
   recall,
   listMemoriesTool,
   forget,
+  // Memorae parity — named lists + briefings
+  addToList,
+  showList,
+  listLists,
+  removeFromList,
+  setBriefing,
 ];
 
 const byName = new Map<string, AssistantTool>(ALL_TOOLS.map((t) => [t.name, t]));
