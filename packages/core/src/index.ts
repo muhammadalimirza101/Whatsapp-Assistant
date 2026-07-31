@@ -47,7 +47,13 @@ export { buildSystemPrompt } from "./agent/prompt.js";
 export { formatInTz, nowInTz, parseModelDate } from "./util/time.js";
 
 // Clients
-export { openai, OPENAI_MODEL } from "./clients/openai.js";
+export { openai, OPENAI_MODEL, embed, EMBEDDING_MODEL } from "./clients/openai.js";
+export {
+  insertMemory,
+  searchMemories,
+  listMemories,
+  deleteMemory,
+} from "./db/memoryStore.js";
 export { transcribeAudio, GROQ_MODEL } from "./clients/groq.js";
 export {
   google,

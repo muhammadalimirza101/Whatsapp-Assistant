@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   uuid,
+  vector,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -84,6 +85,19 @@ export const files = pgTable("files", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// Phase 4: personal memory — facts the user asks the bot to remember, with an
+// embedding for semantic recall (Memorae-style "memory layer").
+export const memories = pgTable("memories", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  content: text("content").notNull(), // the fact, in natural language
+  embedding: vector("embedding", { dimensions: 1536 }), // text-embedding-3-small
+  source: text("source").default("chat"), // chat | voice | document
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Phase 2: short-lived state token tying a Google consent link to a user.
 // Consumed once by the OAuth callback; rows are deleted after use / expiry.
 export const oauthStates = pgTable("oauth_states", {
@@ -109,3 +123,5 @@ export type OAuthToken = typeof oauthTokens.$inferSelect;
 export type BaileysAuthRow = typeof baileysAuth.$inferSelect;
 export type FileRow = typeof files.$inferSelect;
 export type OAuthState = typeof oauthStates.$inferSelect;
+export type Memory = typeof memories.$inferSelect;
+export type NewMemory = typeof memories.$inferInsert;

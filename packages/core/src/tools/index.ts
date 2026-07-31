@@ -25,6 +25,12 @@ import { readRecentEmails } from "./readRecentEmails.js";
 import { readSheet } from "./readSheet.js";
 import { generateReportFromSheet } from "./generateReportFromSheet.js";
 
+// Phase 4 — personal memory (Memorae-style)
+import { remember } from "./remember.js";
+import { recall } from "./recall.js";
+import { listMemoriesTool } from "./listMemories.js";
+import { forget } from "./forget.js";
+
 export * from "./types.js";
 
 const ALL_TOOLS: readonly AssistantTool[] = [
@@ -45,6 +51,11 @@ const ALL_TOOLS: readonly AssistantTool[] = [
   readRecentEmails,
   readSheet,
   generateReportFromSheet,
+  // Phase 4 — personal memory
+  remember,
+  recall,
+  listMemoriesTool,
+  forget,
 ];
 
 const byName = new Map<string, AssistantTool>(ALL_TOOLS.map((t) => [t.name, t]));

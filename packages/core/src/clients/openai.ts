@@ -13,3 +13,16 @@ export function openai(): OpenAI {
 }
 
 export const OPENAI_MODEL = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+export const EMBEDDING_MODEL =
+  process.env.EMBEDDING_MODEL ?? "text-embedding-3-small"; // 1536 dims
+
+/** Embed a single piece of text into a 1536-dim vector. */
+export async function embed(text: string): Promise<number[]> {
+  const res = await openai().embeddings.create({
+    model: EMBEDDING_MODEL,
+    input: text,
+  });
+  const vec = res.data[0]?.embedding;
+  if (!vec) throw new Error("No embedding returned.");
+  return vec;
+}
